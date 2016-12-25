@@ -1,0 +1,26 @@
+@import "svg-sprite";
+
+$font-family-proxima: 'Arial';
+
+//Main colors
+
+//Hues
+
+//Backgrounds
+
+//Borders
+
+//Icons
+$icon-list: (
+
+);
+
+@each $icon in $icon-list {
+.#{$icon} {
+  &:before {
+    @include svg-sprite('#{$icon}');
+    content: '';
+    display: inline-block;
+  }
+}
+}

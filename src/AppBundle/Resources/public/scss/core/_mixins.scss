@@ -1,0 +1,56 @@
+@mixin virtual($virtual: null, $content: null) {
+  //fixme add & to @if statement
+  $ampersand: unquote('&');
+  @if ($ampersand) {
+    @if ($virtual == after) {
+      &:after {
+        content: '#{$content}';
+        @content;
+      }
+    } @else if ($virtual == before) {
+      &:before {
+        content: '#{$content}';
+        @content;
+      }
+    }
+  } @else {
+    @warn "No parent exist! Add your ':#{$virtual}' element to existing class";
+  }
+}
+
+//module positioning mixin depends on bourbon
+@mixin positioning($center: null, $center-y: null, $center-x: null) {
+  position: absolute;
+  @if $center {
+    @include transform(translate(-50%, -50%));
+    left: 50%;
+    top: 50%;
+  }
+  @if $center-y {
+    @include transform(translateY(-50%));
+    top: 50%;
+  }
+  @if $center-x {
+    @include transform(translateX(-50%));
+    left: 50%;
+  }
+}
+
+//module element-icon mixin depends on positioning & svg-sprites mixins
+@mixin element-icon($icon: null, $position: null, $left: null, $right: null, $top: null, $bottom: null) {
+  @include virtual(after) {
+    @include svg-sprite($icon);
+
+    @if ($position == y) {
+      @include positioning($center-y: true);
+      right: $right;
+      left: $left;
+    } @else if ($position == x) {
+      @include positioning($center-x: true);
+      top: $top;
+      bottom: $bottom;
+    } @else {
+      @include positioning($center: true);
+    }
+  }
+}
